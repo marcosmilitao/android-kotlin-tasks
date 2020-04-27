@@ -7,8 +7,8 @@ class HeaderModel {
     @SerializedName("token")
     var token: String = ""
 
-    @SerializedName("personalKey")
-    var personalKey: String = ""
+    @SerializedName("personKey")
+    var personKey: String = ""
 
     @SerializedName("name")
     var name: String = ""

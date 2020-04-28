@@ -1,6 +1,6 @@
 package com.example.tasks.service.repository.remote
 
-import com.example.tasks.service.HeaderModel
+import com.example.tasks.service.model.HeaderModel
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -21,6 +21,7 @@ interface PersonService {
     fun create(
         @Field("name") name: String,
         @Field("email") email: String,
-        @Field("password") password: String
+        @Field("password") password: String,
+        @Field("receiveNews") news: Boolean
     ): Call<HeaderModel>
 }

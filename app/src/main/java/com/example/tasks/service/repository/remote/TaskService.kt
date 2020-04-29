@@ -26,7 +26,7 @@ interface TaskService {
         @Field("Description") description: String,
         @Field("DueDate") dueDate: String,
         @Field("Complete") complete: Boolean
-    ): Call<HeaderModel>
+    ): Call<Boolean>
 
 
     @HTTP(method = "PUT", path = "Task", hasBody = true)
@@ -37,26 +37,26 @@ interface TaskService {
         @Field("Description") description: String,
         @Field("DueDate") dueDate: String,
         @Field("Complete") complete: Boolean
-    ): Call<HeaderModel>
+    ): Call<Boolean>
 
 
     @HTTP(method = "PUT", path = "Task/Complete", hasBody = true)
     @FormUrlEncoded
     fun complete(
         @Field("Id") id: Int
-    ): Call<HeaderModel>
+    ): Call<Boolean>
 
     @HTTP(method = "PUT", path = "Task/Undo", hasBody = true)
     @FormUrlEncoded
     fun undo(
         @Field("Id") id: Int
-    ): Call<HeaderModel>
+    ): Call<Boolean>
 
     @HTTP(method = "DELETE", path = "Task", hasBody = true)
     @FormUrlEncoded
     fun delete(
         @Field("Id") id: Int
-    ): Call<HeaderModel>
+    ): Call<Boolean>
 
 
 }

@@ -20,7 +20,7 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
 
 
     fun create(name: String, email: String, password: String) {
-        mPersonalRepository.create(name,email,password,object : APIListener{
+        mPersonalRepository.create(name,email,password,object : APIListener<HeaderModel>{
             override fun onFailure(str: String) {
                 mCreate.value = ValidationListener(str)
             }
@@ -35,5 +35,4 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
 
         })
     }
-
 }

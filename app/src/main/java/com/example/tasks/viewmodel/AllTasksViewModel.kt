@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.APIListener
 import com.example.tasks.service.listener.ValidationListener
 import com.example.tasks.service.model.TaskModel
@@ -20,9 +21,12 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
     private val mList = MutableLiveData<List<TaskModel>>()
     var tasks: LiveData<List<TaskModel>> = mList
 
-    fun list() {
+    private var mTaskFilter = 0
 
-        mTaskRepository.all(object : APIListener<List<TaskModel>>{
+    fun list(taskFilter: Int) {
+        mTaskFilter = taskFilter
+
+        val listener = object : APIListener<List<TaskModel>>{
             override fun onFailure(str: String) {
                 mList.value = arrayListOf()
                 mValidation.value = ValidationListener(str)
@@ -31,7 +35,16 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
             override fun onSuccess(model: List<TaskModel>) {
                 mList.value = model
             }
-        })
+        }
+
+        if (mTaskFilter == TaskConstants.FILTER.ALL){
+            mTaskRepository.all(listener)
+        } else if (mTaskFilter == TaskConstants.FILTER.NEXT){
+            mTaskRepository.nextWeek(listener)
+        }else{
+            mTaskRepository.overdue(listener)
+        }
+
     }
 
     fun complete(id: Int){
@@ -48,7 +61,7 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
             }
 
             override fun onSuccess(model: Boolean) {
-                list()
+                list(mTaskFilter)
             }
         })
     }
@@ -60,7 +73,7 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
             }
 
             override fun onSuccess(model: Boolean) {
-                list()
+                list(mTaskFilter)
                 mValidation.value = ValidationListener()
             }
         })

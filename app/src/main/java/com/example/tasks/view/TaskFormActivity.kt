@@ -45,6 +45,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         if (bundle != null) {
             mTaskId = bundle.getInt(TaskConstants.BUNDLE.TASKID)
             mViewModel.load(mTaskId)
+            button_save.text = getString(R.string.update_task)
         }
     }
 
@@ -84,7 +85,6 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         mViewModel.priorities.observe(this, androidx.lifecycle.Observer {
             val list: MutableList<String> = arrayListOf()
             for (item in it) {
-                Log.e("ERRRRRRRRRRRRRRRRR", item.description)
                 list.add(item.description)
                 mListPriorityId.add(item.id)
             }
@@ -103,13 +103,23 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
 
         mViewModel.validation.observe(this, androidx.lifecycle.Observer {
             if (it.success()) {
-                Toast.makeText(this, "Sucesso", Toast.LENGTH_SHORT).show()
+                if (mTaskId == 0){
+                    toast(getString(R.string.task_created))
+                }else{
+                    toast(getString(R.string.task_updated))
+                }
+
+                finish()
             } else {
-                Toast.makeText(this, it.failure(), Toast.LENGTH_SHORT).show()
+                toast(it.failure())
+                finish()
             }
         })
     }
 
+    private fun toast(str : String){
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
+    }
     private fun getIndex(priorityId: Int): Int {
         var index = 0
         for (i in 0 until mListPriorityId.count()){

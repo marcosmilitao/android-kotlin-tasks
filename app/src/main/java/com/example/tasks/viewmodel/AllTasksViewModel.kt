@@ -14,6 +14,9 @@ import com.example.tasks.service.repository.local.SecurityPreferences
 class AllTasksViewModel(application: Application) : AndroidViewModel(application) {
     private val mTaskRepository = TaskRepository(application)
 
+    private val mValidation = MutableLiveData<ValidationListener>()
+    var validation: LiveData<ValidationListener> = mValidation
+
     private val mList = MutableLiveData<List<TaskModel>>()
     var tasks: LiveData<List<TaskModel>> = mList
 
@@ -22,6 +25,7 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
         mTaskRepository.all(object : APIListener<List<TaskModel>>{
             override fun onFailure(str: String) {
                 mList.value = arrayListOf()
+                mValidation.value = ValidationListener(str)
             }
 
             override fun onSuccess(model: List<TaskModel>) {
@@ -52,10 +56,12 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
     fun delete(id: Int) {
         mTaskRepository.delete(id,object : APIListener<Boolean>{
             override fun onFailure(str: String) {
+                mValidation.value = ValidationListener(str)
             }
 
             override fun onSuccess(model: Boolean) {
                 list()
+                mValidation.value = ValidationListener()
             }
         })
     }

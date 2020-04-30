@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -74,6 +75,14 @@ class AllTasksFragment : Fragment() {
                 mAdapter.updateListener(it)
             }
         })
+
+            mViewModel.validation.observe(viewLifecycleOwner, Observer {
+                if (it.success()){
+                    Toast.makeText(context, getString(R.string.task_removed), Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(context, it.failure(), Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
 }
